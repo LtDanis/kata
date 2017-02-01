@@ -20,7 +20,5 @@ class firstTest extends PHPUnit_Framework_TestCase
         $this->assertEquals("Three", $switchItUp->switch_it_up(3));
         $this->assertEquals("Five", $switchItUp->switch_it_up(5));
         $this->assertEquals("NaN", $switchItUp->switch_it_up(15));
-        $this->assertEquals("2NaN", $switchItUp->switch_it_up(1511));
-
     }
 }
