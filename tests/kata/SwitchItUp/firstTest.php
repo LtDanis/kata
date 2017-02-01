@@ -12,8 +12,7 @@ include_once __DIR__.'/../../../kata/SwitchItUp/first.php';
 class firstTest extends PHPUnit_Framework_TestCase
 {
 
-    public function test_static_operations()
-    {
+    public function test_static_operations() {
         $switchItUp = new \SwitchItUp\first();
 
         $this->assertEquals("One", $switchItUp->switch_it_up(1));
