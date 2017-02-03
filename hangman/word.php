@@ -14,50 +14,43 @@ use Tobscure\JsonApi\Collection;
 
 header('Content-Type: application/json');
 
-    /*try {
-        $option = $_GET['option'];
-    } catch (Exception $e) {
-        $errors = new ErrorHandler;
+$DIFFICULTY=5;
 
-        $errors->registerHandler(new InvalidParameterExceptionHandler);
-        $errors->registerHandler(new FallbackExceptionHandler);
+//$freimwork->get('/word/:d', function($request, $response) {
 
-        $response = $errors->handle($e);
-
-        $document = new Document;
-        $document->setErrors($response->getErrors());
-
-        return new JsonResponse($document, $response->getStatus());
-    }*/
+//$wordDao=Factory::getWordDao();
+//$wordEntity = $wordDao->getRandomWord($DIFFICULTY);
+//$entityToJsonConverter=Factory::getConverterWordToJson();
+//return $json = $entityToJsonConverter->convert($wordEntity);
+//    $response->write($json);
+//}//fetch() grazink duomenis ir sukonvertuok i WordeEtity
 
 
-    if (isset($_GET['option'])) {
-        $option = $_GET['option'];
+    $posts = array();
+    try {
+        $conn = new PDO("mysql:host=localhost;dbname=hangman", "root", "admin");
+        // set the PDO error mode to exception
+        $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+        echo "Connected successfully";
+    }
+    catch(PDOException $e)
+    {
+        echo "Connection failed: " . $e->getMessage();
+    }
+    $posts = array();
+
+    if (isset($_GET['diff'])) {
+        $option = $_GET['diff'];
+        $sql = $conn->prepare("SELECT id, word FROM words WHERE $option = levelId ORDER BY RAND()");
+        $sql->execute();
+        $row = $sql->fetch(PDO::FETCH_ASSOC);
+        array_push($posts, (object)['id' => $row['id'], 'difficulty' => $option, 'word' => $row['word']]);
     } else {
-        $option = 0;
+        $sql = "SELECT words.id, words.word, words.levelId FROM words INNER JOIN levels ON levels.id = words.levelId ORDER BY words.id";
+        foreach ($conn->query($sql) as $row) {
+            array_push($posts, (object)['id' => $row['id'], 'difficulty' => $row['levelId'], 'word' => $row['word']]);
+        }
     }
-
-    switch ($option) {
-        case 0:
-            $id = 0;
-            $difficulty = "NA";
-            $word = "NA";
-            break;
-        case 1:
-            $id = 1;
-            $difficulty = "easy";
-            $word = "lol";
-            break;
-        default:
-            $id = 2;
-            $difficulty = "medium";
-            $word = "abc";
-            break;
-    }
-
-    $posts = [
-        (object)['id' => $id, 'difficulty' => $difficulty, 'word' => $word]
-    ];
 
 
 // Create a new collection of posts, and specify relationships to be included.
