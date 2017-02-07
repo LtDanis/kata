@@ -6,58 +6,67 @@
  * Date: 17.2.2
  * Time: 12.19
  */
-include_once '../vendor/autoload.php';
-include_once './WordSerializer.php';
+namespace hangman;
 
+require_once __DIR__ . '/../vendor/autoload.php';
+
+use Tobscure\JsonApi\ErrorHandler;
 use Tobscure\JsonApi\Document;
-use Tobscure\JsonApi\Collection;
+use Tobscure\JsonApi\Exception\Handler\InvalidParameterExceptionHandler;
+use Tobscure\JsonApi\Exception\Handler\FallbackExceptionHandler;
 
 header('Content-Type: application/json');
 
-$DIFFICULTY=5;
+class WordJsonResponseBuilder
+{
+    private $converter;
 
-//$freimwork->get('/word/:d', function($request, $response) {
-
-//$wordDao=Factory::getWordDao();
-//$wordEntity = $wordDao->getRandomWord($DIFFICULTY);
-//$entityToJsonConverter=Factory::getConverterWordToJson();
-//return $json = $entityToJsonConverter->convert($wordEntity);
-//    $response->write($json);
-//}//fetch() grazink duomenis ir sukonvertuok i WordeEtity
-
-
-    $posts = array();
-    try {
-        $conn = new PDO("mysql:host=localhost;dbname=hangman", "root", "admin");
-        // set the PDO error mode to exception
-        $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-        echo "Connected successfully";
-    }
-    catch(PDOException $e)
+    public function __construct(WordToJsonConverter $converter)
     {
-        echo "Connection failed: " . $e->getMessage();
+        $this->converter = $converter;
     }
-    $posts = array();
 
-    if (isset($_GET['diff'])) {
-        $option = $_GET['diff'];
-        $sql = $conn->prepare("SELECT id, word FROM words WHERE $option = levelId ORDER BY RAND()");
-        $sql->execute();
-        $row = $sql->fetch(PDO::FETCH_ASSOC);
-        array_push($posts, (object)['id' => $row['id'], 'difficulty' => $option, 'word' => $row['word']]);
-    } else {
-        $sql = "SELECT words.id, words.word, words.levelId FROM words INNER JOIN levels ON levels.id = words.levelId ORDER BY words.id";
-        foreach ($conn->query($sql) as $row) {
-            array_push($posts, (object)['id' => $row['id'], 'difficulty' => $row['levelId'], 'word' => $row['word']]);
+    public function getResponse($entity)
+    {
+        $json = $this->converter->toCollection($entity);
+        return $json;
+    }
+}
+
+
+try {
+    $factory = new Factory();
+
+    //throw new InvalidParameterException("ID is required parameter");
+
+    $wordDao = $factory->getWordDao();
+
+    if (isset($_GET['diff'])) { //ar gerai?
+        $word = $wordDao->getWord($_GET['diff']); //jei turi GET metoda su diff parametrais
+        if ($word == null) {
+            throw new \Exception('No words on this difficulty');
         }
+    } else {
+        $word = $wordDao->getWords(); //likusiu atveju visi imanomi zodziai
     }
 
+    $converter = $factory->getWordConverterToJson();
+    $builder = new WordJsonResponseBuilder($converter);
+    $json = $builder->getResponse($word);
+    echo $json;
 
-// Create a new collection of posts, and specify relationships to be included.
-$collection = (new Collection($posts, new WordSerializer()));
+} catch (\Exception $e) {
+    $errors = new ErrorHandler;
 
-// Create a new JSON-API document with that collection as the data.
-$document = new Document($collection);
+    $errors->registerHandler(new InvalidParameterExceptionHandler);
+    $errors->registerHandler(new \HangmanException());
+    //$errors->registerHandler(new FallbackExceptionHandler(1));
 
-// Output the document as JSON.
-echo json_encode($document);
+    $response = $errors->handle($e);
+
+    $document = new Document;
+    $document->setErrors($response->getErrors());
+    echo $document;
+
+    //return new JsonResponse($document, $response->getStatus());
+}

@@ -4,5 +4,10 @@
   },
   "require": {
     "tobscure/json-api": "^0.3.0"
+  },
+  "autoload": {
+    "psr-4": {
+      "hangman\\": "kata/hangman"
+    }
   }
 }

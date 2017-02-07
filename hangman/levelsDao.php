@@ -8,7 +8,7 @@
  */
 namespace hangman;
 
-include_once 'Factory.php';
+require_once __DIR__ . '/../vendor/autoload.php';
 
 class levelsDao
 {
@@ -27,10 +27,5 @@ class levelsDao
             array_push($posts, (object)['id' => $row['id'], 'difficulty' => $row['difficulty'], 'description' => $row['description']]);
         }
         return $posts;
-    }
-
-    public function getLevel($diff)
-    {
-
     }
 }

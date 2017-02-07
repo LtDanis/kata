@@ -8,8 +8,12 @@
  */
 namespace hangman;
 
-include_once 'levelsDao.php';
-include_once  'entityToJsonConverter.php';
+require_once __DIR__ . '/../vendor/autoload.php';
+
+use \hangman\levelsDao;
+use \hangman\LevelsToJsonConverter;
+use \hangman\wordDao;
+use \hangman\WordToJsonConverter;
 
 class Factory
 {
@@ -32,7 +36,17 @@ class Factory
 
     public function getConverterToJson()
     {
-        return new entityToJsonConverter();
+        return new LevelsToJsonConverter();
+    }
+
+    public function getWordDao()
+    {
+        return new wordDao($this->connect());
+    }
+
+    public function getWordConverterToJson()
+    {
+        return new wordToJsonConverter();
     }
 }
 

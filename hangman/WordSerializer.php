@@ -6,7 +6,9 @@
  * Date: 17.2.2
  * Time: 11.34
  */
-include_once '../vendor/autoload.php';
+namespace hangman;
+
+require_once __DIR__ . '/../vendor/autoload.php';
 
 use Tobscure\JsonApi\AbstractSerializer;
 

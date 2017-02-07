@@ -8,17 +8,18 @@
  */
 namespace hangman;
 
-include_once '../vendor/autoload.php';
-include_once './LevelSerializer.php';
+require_once __DIR__ . '/../vendor/autoload.php';
 
+use \hangman\WordSerializer;
 use Tobscure\JsonApi\Document;
 use Tobscure\JsonApi\Collection;
 
-class entityToJsonConverter
+class WordToJsonConverter
 {
-    public function entityToJsonConverter($posts) {
+    public function toCollection($posts)
+    {
         // Create a new collection of posts, and specify relationships to be included.
-        $collection = (new Collection($posts, new LevelSerializer()));
+        $collection = (new Collection($posts, new WordSerializer()));
 
         // Create a new JSON-API document with that collection as the data.
         $document = new Document($collection);
@@ -26,8 +27,7 @@ class entityToJsonConverter
         // Add metadata.
         $document->addMeta('total', count($posts));
 
-        // Output the document as JSON.
-        return json_encode($document);
+        return $document;
     }
 
 }
