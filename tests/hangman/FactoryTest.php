@@ -9,10 +9,9 @@
 namespace tests\hangman;
 
 use \hangman\Factory;
-use hangman\LevelsDao;
-use \hangman\MysqlLevelsDao;
+use \hangman\LevelsDao;
 use \hangman\LevelsToJsonConverter;
-use \hangman\wordDao;
+use \hangman\WordDao;
 use \hangman\WordToJsonConverter;
 
 

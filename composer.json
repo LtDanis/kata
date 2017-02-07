@@ -1,13 +1,13 @@
 {
   "require-dev": {
-    "phpunit/phpunit": "5.5.*"
+    "phpunit/phpunit": "5.7.*"
   },
   "require": {
     "tobscure/json-api": "^0.3.0"
   },
   "autoload": {
     "psr-4": {
-      "hangman\\": "kata/hangman"
+      "hangman\\": "hangman"
     }
   }
 }

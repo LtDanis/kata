@@ -12,6 +12,6 @@ namespace tests\hangman;
 class LevelsTest extends \PHPUnit_Framework_TestCase
 {
     public function test_rest() {
-        $this->assertEquals(true, true);
+        $this->assertEquals(true, true); //todo
     }
 }

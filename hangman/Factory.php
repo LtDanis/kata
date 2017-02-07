@@ -1,19 +1,6 @@
 <?php
 
-/**
- * Created by PhpStorm.
- * User: danielius
- * Date: 17.2.3
- * Time: 14.00
- */
 namespace hangman;
-
-require_once __DIR__ . '/../vendor/autoload.php';
-
-use \hangman\levelsDao;
-use \hangman\LevelsToJsonConverter;
-use \hangman\wordDao;
-use \hangman\WordToJsonConverter;
 
 class Factory
 {
@@ -21,17 +8,20 @@ class Factory
     const db = "hangman";
     const user = "root";
     const pass = "admin";
+    protected $conn = null;
 
     public function connect()
     {
-        $conn = new \PDO("mysql:host=" . self::server . ";dbname=" . self::db, self::user, self::pass);
-        $conn->setAttribute(\PDO::ATTR_ERRMODE, \PDO::ERRMODE_EXCEPTION);
-        return $conn;
+        if ($this->conn == null) {
+            $this->conn = new \PDO("mysql:host=" . self::server . ";dbname=" . self::db, self::user, self::pass);
+        }
+        $this->conn->setAttribute(\PDO::ATTR_ERRMODE, \PDO::ERRMODE_EXCEPTION);
+        return $this->conn;
     }
 
     public function getLevelDao()
     {
-        return new levelsDao($this->connect());
+        return new MysqlLevelsDao($this->connect());
     }
 
     public function getConverterToJson()
@@ -41,12 +31,11 @@ class Factory
 
     public function getWordDao()
     {
-        return new wordDao($this->connect());
+        return new MysqlWordDao($this->connect());
     }
 
     public function getWordConverterToJson()
     {
-        return new wordToJsonConverter();
+        return new WordToJsonConverter();
     }
 }
-

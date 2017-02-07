@@ -14,40 +14,29 @@ use Tobscure\JsonApi\ErrorHandler;
 use Tobscure\JsonApi\Document;
 use Tobscure\JsonApi\Exception\Handler\InvalidParameterExceptionHandler;
 use Tobscure\JsonApi\Exception\Handler\FallbackExceptionHandler;
+use Tobscure\JsonApi\Parameters;
 
 header('Content-Type: application/json');
-
-class WordJsonResponseBuilder
-{
-    private $converter;
-
-    public function __construct(WordToJsonConverter $converter)
-    {
-        $this->converter = $converter;
-    }
-
-    public function getResponse($entity)
-    {
-        $json = $this->converter->toCollection($entity);
-        return $json;
-    }
-}
-
 
 try {
     $factory = new Factory();
 
-    //throw new InvalidParameterException("ID is required parameter");
-
     $wordDao = $factory->getWordDao();
 
-    if (isset($_GET['diff'])) { //ar gerai?
-        $word = $wordDao->getWord($_GET['diff']); //jei turi GET metoda su diff parametrais
-        if ($word == null) {
-            throw new \Exception('No words on this difficulty');
+
+    $parameters = new Parameters($_GET);
+    $fields = $parameters->getFields();
+
+    $word = null;
+    if (isset($fields['diff'][0])) {
+        //nuskaitomas zodis su GET
+        $word = $wordDao->getWord($fields['diff'][0]);
+        if( $word == null ) {
+            throw new \Exception('No words on this difficulty', 404);
         }
     } else {
-        $word = $wordDao->getWords(); //likusiu atveju visi imanomi zodziai
+        //likusiu atveju visi imanomi zodziai
+        $word = $wordDao->getWords();
     }
 
     $converter = $factory->getWordConverterToJson();
@@ -59,14 +48,12 @@ try {
     $errors = new ErrorHandler;
 
     $errors->registerHandler(new InvalidParameterExceptionHandler);
-    $errors->registerHandler(new \HangmanException());
-    //$errors->registerHandler(new FallbackExceptionHandler(1));
+    $errors->registerHandler(new FallbackExceptionHandler(1));
 
     $response = $errors->handle($e);
 
     $document = new Document;
     $document->setErrors($response->getErrors());
     echo $document;
-
-    //return new JsonResponse($document, $response->getStatus());
 }
+

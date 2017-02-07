@@ -10,7 +10,7 @@ namespace hangman;
 
 require_once __DIR__ . '/../vendor/autoload.php';
 
-class levelsDao
+class MysqlLevelsDao implements LevelsDao
 {
     private $conn;
 

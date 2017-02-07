@@ -1,46 +1,18 @@
 <?php
 
-/**
- * Created by PhpStorm.
- * User: danielius
- * Date: 17.2.2
- * Time: 09.58
- */
 namespace hangman;
 
 require_once __DIR__ . '/../vendor/autoload.php';
 
 header('Content-Type: application/json');
 
-class JsonResponseBuilder
-{
-    private $converter;
+$factory = new Factory();
 
-    public function __construct(LevelsToJsonConverter $converter)
-    {
-        $this->converter = $converter;
-    }
+$levelsDao = $factory->getLevelDao();
+$levels = $levelsDao->getLevels();
 
-    public function getResponse($entity)
-    {
-        $json = $this->converter->toCollection($entity);
-        return $json;
-    }
-}
+$converter = $factory->getConverterToJson();
+$builder = new JsonResponseBuilder($converter);
+$json = $builder->getResponse($levels);
 
-try {
-    $factory = new Factory();
-
-
-    $levelsDao = $factory->getLevelDao();
-    $levels = $levelsDao->getLevels();
-
-    $converter = $factory->getConverterToJson();
-    $builder = new JsonResponseBuilder($converter);
-    $json = $builder->getResponse($levels);
-    echo $json;
-
-
-} catch (\Exception $e) {
-    //return jsonui eee
-}
+echo $json;

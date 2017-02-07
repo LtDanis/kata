@@ -5,6 +5,6 @@ class RestTest extends \PHPUnit_Framework_TestCase
 {
     public function test_restful()
     {
-        //$this->assertTrue(false);
+        $this->assertTrue(true); //todo
     }
 }

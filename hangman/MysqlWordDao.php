@@ -8,7 +8,7 @@
  */
 namespace hangman;
 
-class wordDao
+class MysqlWordDao implements WordDao
 {
     private $conn;
 
