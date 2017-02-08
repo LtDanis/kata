@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<dataset>
+    <words id="1" levelId = "1" word="easy" />
+    <words id="3" levelId = "3" word="very" />
+    <words id="6" levelId = "6" word="labas" />
+</dataset>

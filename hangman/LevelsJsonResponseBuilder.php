@@ -9,7 +9,7 @@
 namespace hangman;
 
 
-class JsonResponseBuilder
+class LevelsJsonResponseBuilder implements Builder
 {
     private $converter;
 
@@ -18,9 +18,9 @@ class JsonResponseBuilder
         $this->converter = $converter;
     }
 
-    public function getResponse($entity)
+    public function getCollection($entities)
     {
-        $json = $this->converter->toCollection($entity);
+        $json = $this->converter->toCollection($entities);
         return $json;
     }
 }

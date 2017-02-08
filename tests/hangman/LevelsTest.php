@@ -9,9 +9,19 @@
 namespace tests\hangman;
 
 
+use hangman\Factory;
+use hangman\LevelEntity;
+use hangman\LevelSerializer;
+use hangman\LevelsJsonResponseBuilder;
+use hangman\LevelsToJsonConverter;
+
 class LevelsTest extends \PHPUnit_Framework_TestCase
 {
-    public function test_rest() {
-        $this->assertEquals(true, true); //todo
+    public function test_json_return_count() {
+        $json = file_get_contents('http://hangman.dev/test-levels.php');
+        $data = json_decode($json);
+
+        $this->assertEquals($data->{'meta'}->{'total'}, 5);
+        $this->assertEquals(count($data->{'data'}), 5);
     }
 }

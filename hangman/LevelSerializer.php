@@ -19,7 +19,7 @@ class LevelSerializer extends AbstractSerializer
     public function getAttributes($post, array $fields = null)
     {
         return [
-            'diffuculty' => $post->difficulty,
+            'difficulty' => $post->difficulty,
             'description' => $post->description,
         ];
     }

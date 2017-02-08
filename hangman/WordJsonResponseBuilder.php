@@ -9,7 +9,7 @@
 namespace hangman;
 
 
-class WordJsonResponseBuilder
+class WordJsonResponseBuilder implements Builder
 {
     private $converter;
 
@@ -18,9 +18,15 @@ class WordJsonResponseBuilder
         $this->converter = $converter;
     }
 
-    public function getResponse($entity)
+    public function getCollection($entities)
     {
-        $json = $this->converter->toCollection($entity);
+        $json = $this->converter->toCollection($entities);
+        return $json;
+    }
+
+    public function getResource($entity)
+    {
+        $json = $this->converter->toResource($entity);
         return $json;
     }
 }

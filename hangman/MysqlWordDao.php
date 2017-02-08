@@ -12,36 +12,32 @@ class MysqlWordDao implements WordDao
 {
     private $conn;
 
-    public function __construct($conn)
+    public function __construct(\PDO $conn)
     {
         $this->conn = $conn;
     }
 
     public function getWord($diff)
     {
-        $posts = array();
-
-        $sql = $this->conn->prepare("SELECT id, word FROM words WHERE :diff = levelId ORDER BY RAND()");
-        $sql->bindValue(':diff', $diff);
+        $sql = $this->conn->prepare("SELECT words.id, words.word, words.levelId FROM words WHERE :diff = levelId ORDER BY RANDOM() LIMIT 1");
+        $sql->bindValue(':diff', $diff, \PDO::PARAM_INT);
         $sql->execute();
-        $row = $sql->fetch(\PDO::FETCH_ASSOC);
-        array_push($posts, (object)['id' => $row['id'], 'difficulty' => $diff, 'word' => $row['word']]);
+        $post = $sql->fetchAll(\PDO::FETCH_CLASS, WordEntity::class);
 
-        if($row['id'] == null) {
+        if($post == null) {
             return null;
         }else {
-            return $posts;
+            return $post[0];
         }
     }
 
     public function getWords()
     {
-        $posts = array();
+        $sql = "SELECT words.id, words.word, words.levelId FROM words LEFT JOIN levels ON levels.id = words.levelId ORDER BY words.id";
 
-        $sql = "SELECT words.id, words.word, words.levelId FROM words INNER JOIN levels ON levels.id = words.levelId ORDER BY words.id";
-        foreach ($this->conn->query($sql) as $row) {
-            array_push($posts, (object)['id' => $row['id'], 'difficulty' => $row['levelId'], 'word' => $row['word']]);
-        }
+        $stmt = $this->conn->prepare($sql);
+        $stmt->execute();
+        $posts = $stmt->fetchAll(\PDO::FETCH_CLASS, WordEntity::class);
 
         return $posts;
     }

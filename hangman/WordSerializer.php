@@ -19,7 +19,7 @@ class WordSerializer extends AbstractSerializer
     public function getAttributes($post, array $fields = null)
     {
         return [
-            'difficulty' => $post->difficulty,
+            'difficulty' => $post->levelId,
             'word' => $post->word,
         ];
     }

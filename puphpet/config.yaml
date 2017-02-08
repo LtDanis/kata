@@ -222,7 +222,7 @@ apache:
                             provider: filesmatch
                     provider: directory
 letsencrypt:
-    install: '1'
+    install: '0'
     settings:
         email: ''
     domains: {  }
@@ -259,7 +259,7 @@ xdebug:
     install: '1'
     settings:
         xdebug.default_enable: '1'
-        xdebug.remote_autostart: '0'
+        xdebug.remote_autostart: '1'
         xdebug.remote_connect_back: '1'
         xdebug.remote_enable: '1'
         xdebug.remote_handler: dbgp

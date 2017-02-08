@@ -23,25 +23,27 @@ try {
 
     $wordDao = $factory->getWordDao();
 
+    $converter = $factory->getWordConverterToJson();
+    $builder = new WordJsonResponseBuilder($converter);
 
     $parameters = new Parameters($_GET);
     $fields = $parameters->getFields();
 
     $word = null;
+    $json = null;
     if (isset($fields['diff'][0])) {
         //nuskaitomas zodis su GET
         $word = $wordDao->getWord($fields['diff'][0]);
+        $json = $builder->getResource($word);
         if( $word == null ) {
             throw new \Exception('No words on this difficulty', 404);
         }
     } else {
         //likusiu atveju visi imanomi zodziai
         $word = $wordDao->getWords();
+        $json = $builder->getCollection($word);
     }
 
-    $converter = $factory->getWordConverterToJson();
-    $builder = new WordJsonResponseBuilder($converter);
-    $json = $builder->getResponse($word);
     echo $json;
 
 } catch (\Exception $e) {

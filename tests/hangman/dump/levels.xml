@@ -1,4 +1,4 @@
-<?xml version="1.0" ?>
+<?xml version="1.0" encoding="UTF-8" ?>
 <dataset>
     <levels id="1" difficulty="Easy" description="very easy" type="levels" />
     <levels id="3" difficulty="Medium" description="very medium" type="levels" />
