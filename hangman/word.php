@@ -33,11 +33,11 @@ try {
     $json = null;
     if (isset($fields['diff'][0])) {
         //nuskaitomas zodis su GET
-        $word = $wordDao->getWord($fields['diff'][0]);
-        $json = $builder->getResource($word);
+        $word = $wordDao->getWord($fields['diff'][0], null);
         if( $word == null ) {
             throw new \Exception('No words on this difficulty', 404);
         }
+        $json = $builder->getResource($word);
     } else {
         //likusiu atveju visi imanomi zodziai
         $word = $wordDao->getWords();

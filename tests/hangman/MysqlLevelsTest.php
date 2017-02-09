@@ -16,13 +16,13 @@ class MysqlLevelsTest extends \PHPUnit_Extensions_Database_TestCase
 {
     protected $db;
 
-    public function getConnection()
+    protected function getConnection()
     {
         $this->db = new \PDO('sqlite:' . __DIR__ . '/dump/example-test.db');
         $this->db->setAttribute(\PDO::ATTR_ERRMODE, \PDO::ERRMODE_EXCEPTION);
         return $this->createDefaultDBConnection($this->db, 'testdb');
     }
-    public function getDataSet()
+    protected function getDataSet()
     {
         return $this->createFlatXMLDataSet(__DIR__ . '/dump/levels.xml');
     }
@@ -37,5 +37,13 @@ class MysqlLevelsTest extends \PHPUnit_Extensions_Database_TestCase
         $this->assertEquals(count($levels), 3);
     }
 
+    public function getData() {
+        $this->getConnection();
+        $this->getDataSet();
+
+        $levelsDao = new MysqlLevelsDao($this->db);
+
+        return $levelsDao->getLevels();
+    }
 }
 

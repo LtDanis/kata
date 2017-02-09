@@ -17,18 +17,18 @@ class MysqlWordDao implements WordDao
         $this->conn = $conn;
     }
 
-    public function getWord($diff)
+    public function getWord($diff, $option)
     {
-        $sql = $this->conn->prepare("SELECT words.id, words.word, words.levelId FROM words WHERE :diff = levelId ORDER BY RANDOM() LIMIT 1");
+        if ($option == null) {
+            $sql = $this->conn->prepare("SELECT words.id, words.word, words.levelId FROM words WHERE :diff = levelId ORDER BY RAND() LIMIT 1");
+        }else {
+            $sql = $this->conn->prepare("SELECT words.id, words.word, words.levelId FROM words WHERE :diff = levelId ORDER BY RANDOM() LIMIT 1");
+        }
         $sql->bindValue(':diff', $diff, \PDO::PARAM_INT);
         $sql->execute();
         $post = $sql->fetchAll(\PDO::FETCH_CLASS, WordEntity::class);
 
-        if($post == null) {
-            return null;
-        }else {
-            return $post[0];
-        }
+        return ($post == null) ? null : $post[0];
     }
 
     public function getWords()

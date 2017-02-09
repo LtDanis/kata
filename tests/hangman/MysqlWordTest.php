@@ -8,11 +8,9 @@
 
 namespace tests\hangman;
 
-use hangman\MysqlLevelsDao;
 use hangman\MysqlWordDao;
 use PHPUnit_Extensions_Database_DataSet_IDataSet;
 use PHPUnit_Extensions_Database_DB_IDatabaseConnection;
-use tests\hangman\dump\MyApp_DbUnit_ArrayDataSet;
 
 class MysqlWordTest extends \PHPUnit_Extensions_Database_TestCase
 {
@@ -32,26 +30,20 @@ class MysqlWordTest extends \PHPUnit_Extensions_Database_TestCase
         return $this->createFlatXMLDataSet(__DIR__ . '/dump/words.xml');
     }
 
-    public function test_show_words()
+    public function test_count_words()
     {
-        $this->getConnection();
-        $this->getDataSet();
-
         $wordsDao = new MysqlWordDao($this->db);
         $words = $wordsDao->getWords();
 
-        $this->assertEquals(count($words), 3);
+        $this->assertEquals(3, count($words));
     }
 
-    public function test_show_word()
+    public function test_find_word()
     {
-        $this->getConnection();
-        $this->getDataSet();
-
         $wordDao = new MysqlWordDao($this->db);
-        $word = $wordDao->getWord(3);
+        $word = $wordDao->getWord(3, true);
 
-        $this->assertEquals($word->{'word'}, "very");
+        $this->assertEquals($word->word, "very");
     }
 
 }
