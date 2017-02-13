@@ -8,18 +8,20 @@
 
 namespace hangman;
 
-
 class LevelsJsonResponseBuilder implements Builder
 {
     private $converter;
+    private $levelsDao;
 
-    public function __construct(LevelsToJsonConverter $converter)
+    public function __construct(Converter $converter, LevelsDao $levels)
     {
         $this->converter = $converter;
+        $this->levelsDao = $levels;
     }
 
-    public function getCollection($entities)
+    public function getResponse($id = null)
     {
+        $entities = $this->levelsDao->getLevels();
         $json = $this->converter->toCollection($entities);
         return $json;
     }

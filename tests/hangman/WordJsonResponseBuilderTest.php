@@ -26,7 +26,7 @@ class WordJsonResponseBuilderTest extends \PHPUnit_Framework_TestCase
 
         $entity = [(object)['id'=>0,'levelId' =>1,'word'=>"asd"]];
         $response = $builder->getResource($entity[0]);
-        $responseA = $builder->getCollection($entity);
+        $responseA = $builder->getResponse($entity);
 
         $this->assertInstanceOf(Converter::class, $converter);
         $this->assertInstanceOf(Builder::class, $builder);

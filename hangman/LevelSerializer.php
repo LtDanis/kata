@@ -8,19 +8,17 @@
  */
 namespace hangman;
 
-require_once __DIR__ . '/../vendor/autoload.php';
-
 use Tobscure\JsonApi\AbstractSerializer;
 
 class LevelSerializer extends AbstractSerializer
 {
     protected $type = 'levels';
 
-    public function getAttributes($post, array $fields = null)
+    public function getAttributes($level, array $fields = null)
     {
         return [
-            'difficulty' => $post->difficulty,
-            'description' => $post->description,
+            'difficulty' => $level->difficulty,
+            'description' => $level->description,
         ];
     }
 }

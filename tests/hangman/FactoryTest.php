@@ -6,14 +6,13 @@
  * Date: 17.2.1
  * Time: 14.11
  */
+
 namespace tests\hangman;
 
+use hangman\Converter;
 use \hangman\Factory;
 use \hangman\LevelsDao;
-use \hangman\LevelsToJsonConverter;
 use \hangman\WordDao;
-use \hangman\WordToJsonConverter;
-
 
 class FactoryTest extends \PHPUnit_Framework_TestCase
 {
@@ -22,8 +21,8 @@ class FactoryTest extends \PHPUnit_Framework_TestCase
         $factory = new Factory();
 
         $this->assertInstanceOf(LevelsDao::class, $factory->getLevelDao());
-        $this->assertInstanceOf(LevelsToJsonConverter::class, $factory->getConverterToJson());
+        $this->assertInstanceOf(Converter::class, $factory->getConverterToJson());
         $this->assertInstanceOf(WordDao::class, $factory->getWordDao());
-        $this->assertInstanceOf(WordToJsonConverter::class, $factory->getWordConverterToJson());
+        $this->assertInstanceOf(Converter::class, $factory->getWordConverterToJson());
     }
 }

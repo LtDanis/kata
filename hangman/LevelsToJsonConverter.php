@@ -6,9 +6,8 @@
  * Date: 17.2.3
  * Time: 14.46
  */
-namespace hangman;
 
-require_once __DIR__ . '/../vendor/autoload.php';
+namespace hangman;
 
 use Tobscure\JsonApi\Document;
 use Tobscure\JsonApi\Collection;
@@ -25,6 +24,9 @@ class LevelsToJsonConverter implements Converter
 
         // Add metadata.
         $document->addMeta('total', count($levelsEntities));
+//        $document->addLink('self', 'http://www.hangman.dev/api/v1/difficulties');
+//        $document->addLink('words', 'http://www.hangman.dev/api/v1/words');
+//        $document->addLink('test-mode', 'http://www.hangman.dev/api/v1/difficulties?test-mode');
 
         return json_encode($document);
     }

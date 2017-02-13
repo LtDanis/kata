@@ -6,6 +6,7 @@
  * Date: 17.2.2
  * Time: 12.19
  */
+
 namespace hangman;
 
 require_once __DIR__ . '/../vendor/autoload.php';
@@ -41,7 +42,7 @@ try {
     } else {
         //likusiu atveju visi imanomi zodziai
         $word = $wordDao->getWords();
-        $json = $builder->getCollection($word);
+        $json = $builder->getResponse($word);
     }
 
     echo $json;

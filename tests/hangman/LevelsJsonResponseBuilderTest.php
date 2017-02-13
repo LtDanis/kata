@@ -8,27 +8,45 @@
 
 namespace tests\hangman;
 
-
-use hangman\Builder;
 use hangman\Converter;
-use hangman\Factory;
+use hangman\LevelEntity;
+use hangman\LevelsDao;
 use hangman\LevelsJsonResponseBuilder;
-use hangman\LevelsToJsonConverter;
 
 class LevelsJsonResponseBuilderTest extends \PHPUnit_Framework_TestCase
 {
+    public function test_reads_levels_and_converts_to_json()
+    {
+        $level1 = new LevelEntity();
+        $level1->setData(1, 1, "Level 1");
 
-    public function test_json_builder() {
-        $factory = new Factory();
-        $converter = $factory->getConverterToJson();
-        $builder = new LevelsJsonResponseBuilder($converter);
+        $level2 = new LevelEntity();
+        $level2->setData(2, 2, "Level 2");
 
-        $entity = [(object)['id'=>0,'difficulty' =>1,'description'=>""]];
-        $response = $builder->getCollection($entity);
+        $levels = array(
+            $level1, $level2
+        );
 
-        $this->assertInstanceOf(Converter::class, $converter);
-        $this->assertInstanceOf(Builder::class, $builder);
-        $this->assertStringStartsWith("{", $response);
+        /** @var LevelsDao|\PHPUnit_Framework_MockObject_MockObject $daoMock */
+        $daoMock = $this->getMockBuilder(LevelsDao::class)
+            ->setMethods(['getLevels'])
+            ->getMock();
+        $daoMock->expects($this->once())
+            ->method('getLevels')
+            ->will($this->returnValue($levels));
 
+        /** @var Converter|\PHPUnit_Framework_MockObject_MockObject $converterMock */
+        $converterMock = $this->getMockBuilder(Converter::class)
+            ->setMethods(['toCollection'])
+            ->getMock();
+        $converterMock->expects($this->once())
+            ->method('toCollection')
+            ->with($this->equalTo($levels))
+            ->will($this->returnValue('json data'));
+
+        $builder = new LevelsJsonResponseBuilder($converterMock, $daoMock);
+        $response = $builder->getResponse();
+
+        $this->assertEquals('json data', $response);
     }
 }

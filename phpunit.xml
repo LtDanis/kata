@@ -1,5 +1,14 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<phpunit bootstrap="./vendor/autoload.php">
+<phpunit backupGlobals="false"
+         backupStaticAttributes="false"
+         colors="true"
+         convertErrorsToExceptions="true"
+         convertNoticesToExceptions="true"
+         convertWarningsToExceptions="true"
+         processIsolation="false"
+         stopOnFailure="false"
+         syntaxCheck="false"
+         bootstrap="./vendor/autoload.php">
     <testsuites>
         <testsuite name="Unit tests">
             <directory>tests</directory>
@@ -7,7 +16,14 @@
     </testsuites>
     <filter>
         <whitelist processUncoveredFilesFromWhitelist="true">
-            <directory suffix=".php">hangman</directory>
+            <directory suffix=".php">./hangman</directory>
+            <exclude>
+                <directory suffix=".php">./tests</directory>
+            </exclude>
         </whitelist>
     </filter>
+    <logging>
+        <log type="coverage-clover" target="./build/tests-clover.xml"/>
+        <log type="junit" target="./build/tests-junit.xml" logIncompleteSkipped="false"/>
+    </logging>
 </phpunit>

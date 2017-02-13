@@ -8,7 +8,6 @@
 
 namespace hangman;
 
-
 interface Converter
 {
     public function toCollection($entities);

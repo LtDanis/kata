@@ -18,7 +18,7 @@ class WordJsonResponseBuilder implements Builder
         $this->converter = $converter;
     }
 
-    public function getCollection($entities)
+    public function getResponse($entities = null)
     {
         $json = $this->converter->toCollection($entities);
         return $json;

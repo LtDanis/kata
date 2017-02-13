@@ -6,6 +6,7 @@
  * Date: 17.2.3
  * Time: 14.35
  */
+
 namespace hangman;
 
 class MysqlWordDao implements WordDao

@@ -8,8 +8,7 @@
 
 namespace hangman;
 
-
 interface Builder
 {
-    public function getCollection($entities);
+    public function getResponse($id = null);
 }

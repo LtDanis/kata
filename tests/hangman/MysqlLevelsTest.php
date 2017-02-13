@@ -28,9 +28,6 @@ class MysqlLevelsTest extends \PHPUnit_Extensions_Database_TestCase
     }
 
     public function test_show_levels() {
-        $this->getConnection();
-        $this->getDataSet();
-
         $levelsDao = new MysqlLevelsDao($this->db);
         $levels = $levelsDao->getLevels();
 
@@ -38,10 +35,7 @@ class MysqlLevelsTest extends \PHPUnit_Extensions_Database_TestCase
     }
 
     public function getData() {
-        $this->getConnection();
-        $this->getDataSet();
-
-        $levelsDao = new MysqlLevelsDao($this->db);
+         $levelsDao = new MysqlLevelsDao($this->db);
 
         return $levelsDao->getLevels();
     }

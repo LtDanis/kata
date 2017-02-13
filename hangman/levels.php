@@ -7,12 +7,34 @@ require_once __DIR__ . '/../vendor/autoload.php';
 header('Content-Type: application/json');
 
 $factory = new Factory();
-
 $levelsDao = $factory->getLevelDao();
-$levels = $levelsDao->getLevels();
-
 $converter = $factory->getConverterToJson();
-$builder = new LevelsJsonResponseBuilder($converter);
-$json = $builder->getCollection($levels);
+
+$builder = new LevelsJsonResponseBuilder($converter, $levelsDao);
+
+$json = $builder->getResponse();
 
 echo $json;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
